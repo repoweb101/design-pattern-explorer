@@ -1,0 +1,240 @@
+<!doctype html>
+
+<html lang="en">
+
+    <head>
+
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+
+        <title>Explorador de Patrones de Diseño</title>
+
+      <script type="module" crossorigin src="/index-B9By4Y3b.js"></script>
+      <link rel="stylesheet" crossorigin href="/index-D-erebcJ.css">
+    </head>
+
+    <body class="flex flex-col w-full min-h-full bg-gray-900 text-gray-200 font-sans">
+
+        <div x-data="design_patterns_data" class="flex flex-col md:flex-row min-w-full min-h-screen">
+
+                <!-- Sidebar -->
+                <aside class="hidden md:flex md:flex-col md:min-w-60 md:max-w-60 md:w-full min-h-full bg-[conic-gradient(from_270deg_at_0%_0%,theme(colors.gray.400),theme(colors.stone-900))]
+                              border-r border-gray-700 p-4 md:overflow-y-auto"
+                >
+
+                    <h1 class="text-2xl font-bold text-white mb-6 text-center">Patrones de Diseño</h1>
+
+                    <nav class="space-y-6">
+
+                        <template x-for="group in pattern_groups" :key="group.type">
+
+                            <div class="w-full">
+
+                                <h2 class="text-lg font-semibold mb-2" :class="group.color" x-text="group.type"></h2>
+
+                                <ul class="space-y-1">
+
+                                    <template x-for="pattern in group.patterns" :key="pattern.name">
+
+                                        <li class="w-full">
+
+                                            <button
+                                                @click="selectPattern(pattern)"
+                                                class="w-full text-left px-4 py-2 rounded-md transition-colors duration-200"
+                                                :class="selected_pattern && selected_pattern.name === pattern.name
+                                                ? 'bg-blue-900'
+                                                : 'text-gray-300 hover:bg-gray-700 hover:text-white'"
+                                            >
+                                                <span x-text="pattern.name"></span>
+                                            </button>
+
+                                        </li>
+
+                                    </template>
+
+                                </ul>
+
+                            </div>
+
+                        </template>
+
+                    </nav>
+
+                </aside>
+
+                <!-- Main Content -->
+                <main class="flex flex-col md:min-w-90 md:w-full bg-[conic-gradient(from_90deg_at_0%_0%,theme(colors.slate.950),theme(colors.indigo.900))]">
+
+                    <!-- Mobile Header -->
+                    <header class="md:hidden flex items-center justify-between p-4 top-0 bg-gray-900/80 backdrop-blur-sm border-b border-gray-700">
+
+                        <button @click="is_sidebar_open = ! is_sidebar_open" aria-label="Abrir menú" class="p-2 -ml-2 text-gray-300 hover:text-white">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            </svg>
+                        </button>
+
+                        <h1 class="text-lg font-bold text-white truncate" x-text="selected_pattern ? selected_pattern.name : 'Patrones'"></h1>
+
+                        <div class="w-6" aria-hidden="true"></div> <!-- Spacer to balance the title -->
+
+                        <template x-if="is_sidebar_open === true">
+
+                            <!-- Sidebar -->
+                            <section class="absolute top-12 w-60 h-auto md:h-full md:w-64 lg:w-72 xl:w-80 bg-[conic-gradient(from_270deg_at_0%_0%,theme(colors.gray.400),theme(colors.stone-900))]
+                                        border-r border-gray-700 p-4 z-10 md:overflow-y-auto"
+                                :class="is_sidebar_open ? 'translate-x-0' : '-translate-x-full'"
+                            >
+
+                                <h1 class="text-2xl font-bold text-white mb-6 text-center">Patrones de Diseño</h1>
+
+                                <nav class="space-y-6">
+
+                                    <template x-for="group in pattern_groups" :key="group.type">
+
+                                        <div class="w-full">
+
+                                            <h2 class="text-lg font-semibold mb-2" :class="group.color" x-text="group.type"></h2>
+
+                                            <ul class="space-y-1">
+
+                                                <template x-for="pattern in group.patterns" :key="pattern.name">
+
+                                                    <li class="w-full">
+
+                                                        <button
+                                                            @click="selectPattern(pattern); is_sidebar_open = false"
+                                                            class="w-full text-left px-4 py-2 rounded-md transition-colors duration-200"
+                                                            :class="selected_pattern && selected_pattern.name === pattern.name
+                                                            ? 'bg-blue-900'
+                                                            : 'text-gray-300 hover:bg-gray-700 hover:text-white'"
+                                                        >
+                                                            <span x-text="pattern.name"></span>
+                                                        </button>
+
+                                                    </li>
+
+                                                </template>
+
+                                            </ul>
+
+                                        </div>
+
+                                    </template>
+
+                                </nav>
+
+                            </section>
+                        </template>
+
+                    </header>
+
+                    <div class="p-4 md:p-8">
+
+                        <template x-if="selected_pattern">
+
+                            <div class="w-full space-y-8 mt-16 md:mt-0 pb-16">
+
+                                <section class="w-full flex items-center gap-4">
+
+                                    <h2 class="text-4xl font-extrabold text-gray-50" x-text="selected_pattern.name"></h2>
+
+                                    <span class="px-3 py-1 text-sm font-medium rounded-full border" :class="pattern_type_styles[selected_pattern.type]" x-text="selected_pattern.type"></span>
+
+                                </section>
+
+                                <section class="w-full">
+
+                                    <h2 class="text-2xl font-bold text-gray-300 mb-3">Descripción</h2>
+
+                                    <p class="text-gray-200/80 leading-relaxed" x-text="selected_pattern.description"></p>
+
+                                </section>
+
+                                <section class="w-full">
+
+                                    <h2 class="text-2xl font-bold text-gray-300 mb-3">Caso de Uso</h2>
+
+                                    <p class="text-gray-200/80 leading-relaxed" x-text="selected_pattern.useCase"></p>
+
+                                </section>
+
+                                <section class="w-full">
+
+                                    <h2 class="text-2xl font-bold text-gray-300 mb-4">Ejemplo de Código</h2>
+
+                                    <div class="flex border-b border-gray-700 bg-gray-800/50 rounded-t-lg">
+
+                                        <template x-for="lang in available_languages" :key="lang">
+
+                                            <button
+                                                @click="selected_language = lang"
+                                                class="capitalize px-4 py-2 text-sm font-medium transition-colors focus:outline-none"
+                                                :class="selected_language === lang
+                                                    ? 'border-b-2 border-blue-500 text-white'
+                                                    : 'text-gray-400 hover:text-white border-b-2 border-transparent'"
+                                            >
+                                                <span x-text="lang === 'csharp' ? 'C#' : lang"></span>
+                                            </button>
+
+                                        </template>
+
+                                    </div>
+
+                                    <div x-data="code_block_data"
+                                        x-init="initializeCode(selected_pattern.codeExample[selected_language], selected_language)"
+                                        x-effect="initializeCode(selected_pattern.codeExample[selected_language], selected_language)"
+                                    >
+
+                                        <div class="code-block-wrapper">
+
+                                            <div class="line-numbers">
+
+                                                <template x-for="(_, index) in lines" :key="index">
+
+                                                    <span x-text="index + 1"></span>
+
+                                                </template>
+
+                                            </div>
+
+                                            <pre class="code-content" :aria-label="`Ejemplo de código en ${language}`">
+
+                                                <code x-html="highlighted_code"></code>
+
+                                            </pre>
+
+                                        </div>
+
+                                    </div>
+
+                                </section>
+
+                                <section class="w-full">
+
+                                    <h2 class="text-2xl font-bold text-gray-300 mb-3">Explicación</h2>
+
+                                    <p class="text-gray-300 leading-relaxed bg-gray-800/50 border border-gray-700 p-4 rounded-lg" x-text="selected_pattern.codeExplanation"></p>
+
+                                </section>
+
+                            </div>
+
+                        </template>
+
+                        <template x-if="!selected_pattern">
+                            <div class="flex items-center justify-center h-full text-gray-500">Selecciona un patrón para ver sus detalles.</div>
+                        </template>
+
+                    </div>
+
+                </main>
+
+        </div>
+
+    </body>
+
+</html>
